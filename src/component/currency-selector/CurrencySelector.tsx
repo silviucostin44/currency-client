@@ -31,13 +31,6 @@ export default function CurrencySelector({currencies, name, onSelect}: {
                             sx={{'& > img': {mr: 2, flexShrink: 0}}}
                             {...optionProps}
                         >
-                            <img
-                                loading="lazy"
-                                width="20"
-                                srcSet={`https://flagcdn.com/w40/FR.png 2x`}
-                                src={`https://flagcdn.com/w20/FR.png`}
-                                alt=""
-                            />
                             {option.name} ({option.code})
                         </Box>
                     );
