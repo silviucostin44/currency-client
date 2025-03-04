@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Currency} from "./model/currency";
+import CurrencyConverter from "./component/currency-converter/CurrencyConverter";
+import {Alert, CircularProgress} from "@mui/material";
+import useSWRImmutable from "swr/immutable";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+export default function App() {
+
+    return <div className="app">
+        <AppContent></AppContent>
+    </div>;
 }
 
-export default App;
+function AppContent() {
+    const {data, isLoading} = useSWRImmutable<Currency[]>(`/currencies`);
+
+    if (isLoading) return <CircularProgress className="on-center" size="5rem"/>;
+    if (!data) return <Alert className="on-center" severity="error">We are sorry. The service is currently
+        unavailable.</Alert>;
+
+    return <CurrencyConverter currencies={data}></CurrencyConverter>;
+}

@@ -1,0 +1,32 @@
+.container {
+    height: 20rem;
+    width: 40rem;
+    display: flex;
+    flex-flow: column;
+    align-items: start;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    margin-top: 10%;
+    font-family: cursive, serif;
+
+    .title {
+        font-weight: normal;
+    }
+
+    .currency-line {
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        border: #1976d2c2 solid 1px;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 1rem;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .button {
+        align-self: end;
+    }
+
+}
