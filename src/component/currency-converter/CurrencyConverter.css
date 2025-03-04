@@ -27,6 +27,7 @@
 
     .button {
         align-self: end;
+        margin-bottom: 1rem;
     }
 
 }

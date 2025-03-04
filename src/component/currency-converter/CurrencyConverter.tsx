@@ -3,9 +3,12 @@ import {Currency} from "../../model/currency";
 import CurrencySelector from "../currency-selector/CurrencySelector";
 import {Button, Chip, TextField} from "@mui/material";
 import {ChangeEvent, useState} from "react";
-import i18next from "i18next";
 import useSWRMutation from "swr/mutation";
 import {fetcher} from "../../config/fetcher";
+import formatCurrency from "./currencyFormatter";
+import {ErrorCodes} from "../../error-handling/errorCodes";
+import {ErrorMessages} from "../../error-handling/errorMessages";
+import {AxiosError} from "axios";
 
 
 export default function CurrencyConverter({currencies}: { currencies: Currency[] }) {
@@ -13,7 +16,7 @@ export default function CurrencyConverter({currencies}: { currencies: Currency[]
     const [quoteCurrency, setQuoteCurrency] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
 
-    const {trigger, data, error} =  // todo: catch error
+    const {trigger, data, error} =
         useSWRMutation<number>(`/convert/${baseCurrency}/${quoteCurrency}?amount=${amount}`, fetcher);
 
     function handleAmountInsert(event: ChangeEvent<HTMLInputElement>) {
@@ -22,16 +25,6 @@ export default function CurrencyConverter({currencies}: { currencies: Currency[]
 
     function isButtonDisabled() {
         return baseCurrency === '' || quoteCurrency === '' || amount === 0;
-    }
-
-    function formatCurrency() {
-        if (!data) {
-            return '';
-        }
-        return i18next.t('format_currency', {
-            value: data,
-            formatParams: {value: {currency: quoteCurrency, locale: 'en-US', maximumFractionDigits: 6}}
-        });
     }
 
     return (
@@ -45,7 +38,6 @@ export default function CurrencyConverter({currencies}: { currencies: Currency[]
                     required
                     id="base-input"
                     type="number"
-                    error={false}
                     onChange={handleAmountInsert}
                     slotProps={{
                         inputLabel: {
@@ -63,7 +55,7 @@ export default function CurrencyConverter({currencies}: { currencies: Currency[]
                                   onSelect={setQuoteCurrency}></CurrencySelector>
                 <TextField
                     id="quote-input"
-                    value={formatCurrency()}
+                    value={formatCurrency(data, quoteCurrency)}
                     slotProps={{
                         input: {
                             readOnly: true,
@@ -73,14 +65,18 @@ export default function CurrencyConverter({currencies}: { currencies: Currency[]
             </div>
             <Button className="button" onClick={() => trigger()} disabled={isButtonDisabled()}
                     variant="contained" size="large">Convert</Button>
-            <ErrorMessage isError={error}></ErrorMessage>
+            <ErrorMessage error={error}></ErrorMessage>
         </div>
     )
 }
 
-function ErrorMessage({isError}: { isError: boolean }) {
-    if (isError) {
-        return <Chip label="There was an error converting. Please try again."
+function ErrorMessage({error}: { error: AxiosError }) {
+    if (error) {
+        const label = (error.response?.data as string).startsWith(ErrorCodes.UNSUPPORTED_CURRENCY)
+            ? ErrorMessages.UNSUPPORTED_CURRENCY_MESSAGE
+            : ErrorMessages.GENERAL_ERROR_MESSAGE;
+
+        return <Chip label={label}
                      variant="outlined" color="error" size="small"/>;
     }
     return null;
