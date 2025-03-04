@@ -37,5 +37,3 @@ describe('App', () => {
         expect(linkElement).toBeInTheDocument();
     });
 })
-
-const MOCK_CURRENCIES = {}
