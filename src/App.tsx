@@ -8,7 +8,7 @@ import useSWRImmutable from "swr/immutable";
 export default function App() {
 
     return <div className="app">
-        <AppContent></AppContent>
+        <AppContent/>
     </div>;
 }
 
@@ -19,5 +19,5 @@ function AppContent() {
     if (!data) return <Alert className="on-center" severity="error">We are sorry. The service is currently
         unavailable.</Alert>;
 
-    return <CurrencyConverter currencies={data}></CurrencyConverter>;
+    return <CurrencyConverter currencies={data}/>;
 }

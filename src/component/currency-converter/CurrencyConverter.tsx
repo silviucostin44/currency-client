@@ -33,12 +33,14 @@ export default function CurrencyConverter({currencies}: { currencies: Currency[]
             <div className="currency-line">
                 <CurrencySelector currencies={currencies}
                                   name="from"
-                                  onSelect={setBaseCurrency}></CurrencySelector>
+                                  data-testid="base-selector"
+                                  onSelect={setBaseCurrency}/>
                 <TextField
                     required
                     id="base-input"
                     type="number"
                     onChange={handleAmountInsert}
+                    data-testid="amount-input"
                     slotProps={{
                         inputLabel: {
                             shrink: true,
@@ -52,10 +54,12 @@ export default function CurrencyConverter({currencies}: { currencies: Currency[]
             <div className="currency-line">
                 <CurrencySelector currencies={currencies}
                                   name="to"
-                                  onSelect={setQuoteCurrency}></CurrencySelector>
+                                  data-testid="quote-selector"
+                                  onSelect={setQuoteCurrency}/>
                 <TextField
                     id="quote-input"
                     value={formatCurrency(data, quoteCurrency)}
+                    data-testid="converted-amount-input"
                     slotProps={{
                         input: {
                             readOnly: true,
@@ -65,7 +69,7 @@ export default function CurrencyConverter({currencies}: { currencies: Currency[]
             </div>
             <Button className="button" onClick={() => trigger()} disabled={isButtonDisabled()}
                     variant="contained" size="large">Convert</Button>
-            <ErrorMessage error={error}></ErrorMessage>
+            <ErrorMessage error={error}/>
         </div>
     )
 }
