@@ -24,7 +24,7 @@ export default function CurrencyConverter({currencies}: { currencies: Currency[]
     }
 
     function isButtonDisabled() {
-        return baseCurrency === '' || quoteCurrency === '' || amount === 0;
+        return baseCurrency === '' || quoteCurrency === '' || !amount;
     }
 
     return (
